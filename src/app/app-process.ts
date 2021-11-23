@@ -28,7 +28,61 @@ export class AppProcess {
     );
   }
 
-  async getOutputDataMapData() {}
+  async getOutputMappedData(
+    inputMappingConfigs: any[],
+    inputDataMappings: any[]
+  ): Promise<{ outputUnMappedData: any[]; outputMappedData: any[] }> {
+    let outputMappedData = [];
+    let outputUnMappedData = [];
+    try {
+      for (const inputDataMapping of inputDataMappings) {
+        const inputDataOldReference =
+          inputDataMapping.inputDataOldReference || '';
+        const mappingConfig = _.find(
+          inputMappingConfigs || [],
+          (config) =>
+            config[EXCEL_FILE_CONFIG.inputMappingOldReferenceColumnName] ===
+            inputDataOldReference
+        );
+        if (mappingConfig) {
+          const inputDataOldReferences = `${
+            mappingConfig[EXCEL_FILE_CONFIG.inputMappingNewReferenceColumnName]
+          }`.split('.');
+          const dataElement =
+            inputDataOldReferences.length > 0 ? inputDataOldReferences[0] : '';
+          const categoryOptionCombo =
+            inputDataOldReferences.length > 1 ? inputDataOldReferences[1] : '';
+          if (dataElement != '') {
+            inputDataMapping[
+              EXCEL_FILE_CONFIG.inputDataDataElementReferenceColumnName
+            ] = dataElement;
+            inputDataMapping[
+              EXCEL_FILE_CONFIG.inputDataCategoryOptionComboReferenceColumnName
+            ] = categoryOptionCombo;
+            outputMappedData.push(inputDataMapping);
+          } else {
+            outputUnMappedData.push(inputDataMapping);
+          }
+        } else {
+          outputUnMappedData.push(inputDataMapping);
+        }
+      }
+    } catch (error: any) {
+      await this.logsUtil.addLogs(
+        'error',
+        error.message || error,
+        'getOutputMappedData'
+      );
+    }
+    return {
+      outputMappedData: _.map(_.flattenDeep(outputMappedData), (data) =>
+        _.omit(data, 'inputDataOldReference')
+      ),
+      outputUnMappedData: _.map(_.flattenDeep(outputUnMappedData), (data) =>
+        _.omit(data, 'inputDataOldReference')
+      )
+    };
+  }
 
   async getInputDataMappingFile() {
     let data = [];
@@ -38,7 +92,7 @@ export class AppProcess {
       data = _.map(_.keys(jsonData), (sheetName) => jsonData[sheetName]);
     } catch (error: any) {
       await this.logsUtil.addLogs(
-        'info',
+        'error',
         error.message || error,
         'getInputDataMappingFile'
       );
@@ -67,11 +121,20 @@ export class AppProcess {
       data.push(jsonData[EXCEL_FILE_CONFIG.inputMappingFileSheetName] || []);
     } catch (error: any) {
       await this.logsUtil.addLogs(
-        'info',
+        'error',
         error.message || error,
         'getInputMappingFile'
       );
     }
-    return _.flattenDeep(data);
+    return _.filter(
+      _.flattenDeep(data),
+      (dataObj) =>
+        _.keys(dataObj).includes(
+          EXCEL_FILE_CONFIG.inputMappingNewReferenceColumnName
+        ) &&
+        _.keys(dataObj).includes(
+          EXCEL_FILE_CONFIG.inputMappingOldReferenceColumnName
+        )
+    );
   }
 }

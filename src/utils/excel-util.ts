@@ -30,7 +30,7 @@ export class ExcelUtil {
       await this.logsUtil.addLogs(
         'info',
         `Writing excel contents to ${this.fileUtil.formattedFileName}`,
-        'getJsonDataFromExcelOrCsvFile'
+        'writeToSingleSheetExcelFile'
       );
       const ws = xlsx.utils.json_to_sheet(jsonData, {
         header: _.uniq(_.flattenDeep(_.map(jsonData, (data) => _.keys(data)))),
@@ -43,7 +43,7 @@ export class ExcelUtil {
       await this.logsUtil.addLogs(
         'error',
         error.message || error,
-        'getJsonDataFromExcelOrCsvFile'
+        'writeToSingleSheetExcelFile'
       );
     }
   }
@@ -53,7 +53,7 @@ export class ExcelUtil {
       await this.logsUtil.addLogs(
         'info',
         `Writing excel contents to ${this.fileUtil.formattedFileName}`,
-        'getJsonDataFromExcelOrCsvFile'
+        'writeToMultipleSheetExcelFile'
       );
       let workbook = xlsx.utils.book_new();
       for (const sheetName of _.keys(jsonDataObject)) {
@@ -71,7 +71,7 @@ export class ExcelUtil {
       await this.logsUtil.addLogs(
         'error',
         error.message || error,
-        'getJsonDataFromExcelOrCsvFile'
+        'writeToMultipleSheetExcelFile'
       );
     }
   }

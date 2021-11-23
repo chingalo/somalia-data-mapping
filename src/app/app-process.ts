@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { EXCEL_FILE_CONFIG } from '../configs/excel-file-config';
+import { AppUtil } from '../utils/app-util';
 import { ExcelUtil } from '../utils/excel-util';
 import { LogsUtil } from '../utils/logs-util';
 
@@ -27,7 +28,36 @@ export class AppProcess {
     );
   }
 
-  async getInputDataMappingFile() {}
+  async getOutputDataMapData() {}
+
+  async getInputDataMappingFile() {
+    let data = [];
+    try {
+      const jsonData =
+        await this.inputDataFileExcelUtil.getJsonDataFromExcelOrCsvFile();
+      data = _.map(_.keys(jsonData), (sheetName) => jsonData[sheetName]);
+    } catch (error: any) {
+      await this.logsUtil.addLogs(
+        'info',
+        error.message || error,
+        'getInputDataMappingFile'
+      );
+    }
+    return _.map(_.flattenDeep(data), (dataObj) => {
+      const dataelement =
+        dataObj[EXCEL_FILE_CONFIG.inputDataDataElementReferenceColumnName];
+      const categoryoptioncombo =
+        dataObj[
+          EXCEL_FILE_CONFIG.inputDataCategoryOptionComboReferenceColumnName
+        ];
+      const inputDataOldReference = `${dataelement}.${categoryoptioncombo}`;
+      return {
+        ...dataObj,
+        inputDataOldReference,
+        lastupdated: AppUtil.getExcelDateToJSDate(dataObj.lastupdated)
+      };
+    });
+  }
 
   async getInputMappingFile() {
     const data = [];

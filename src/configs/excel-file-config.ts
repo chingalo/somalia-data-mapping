@@ -10,6 +10,6 @@ export const EXCEL_FILE_CONFIG: ExcelFileConfigModel = {
   inputDataFileName: 'MF-04_data',
   inputDataFileExtension: 'csv',
   inputDataDataElementReferenceColumnName: 'dataelement',
-  inputDataCategoryComboReferenceColumnName: 'categoryoptioncombouid',
+  inputDataCategoryOptionComboReferenceColumnName: 'categoryoptioncombouid',
   outputDataFileName: '[Mapped] MF-04_data'
 };

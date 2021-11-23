@@ -8,6 +8,6 @@ export interface ExcelFileConfigModel {
   inputDataFileName: string;
   inputDataFileExtension: string;
   inputDataDataElementReferenceColumnName: string;
-  inputDataCategoryComboReferenceColumnName: string;
+  inputDataCategoryOptionComboReferenceColumnName: string;
   outputDataFileName: string;
 }

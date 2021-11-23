@@ -8,7 +8,8 @@ export class AppProcess {
   private logsUtil: LogsUtil;
   private inputMappingFileExcelUtil: ExcelUtil;
   private inputDataFileExcelUtil: ExcelUtil;
-  private outputDataFileExcelUtil: ExcelUtil;
+  private outputMappedDataFileExcelUtil: ExcelUtil;
+  private outputUnMappedDataFileExcelUtil: ExcelUtil;
   constructor() {
     this.logsUtil = new LogsUtil();
     this.inputMappingFileExcelUtil = new ExcelUtil(
@@ -21,11 +22,40 @@ export class AppProcess {
       EXCEL_FILE_CONFIG.excelDir,
       EXCEL_FILE_CONFIG.inputDataFileExtension
     );
-    this.outputDataFileExcelUtil = new ExcelUtil(
-      EXCEL_FILE_CONFIG.outputDataFileName,
+    this.outputMappedDataFileExcelUtil = new ExcelUtil(
+      EXCEL_FILE_CONFIG.outputMappedDataFileName,
       EXCEL_FILE_CONFIG.excelDir,
       EXCEL_FILE_CONFIG.inputDataFileExtension
     );
+    this.outputUnMappedDataFileExcelUtil = new ExcelUtil(
+      EXCEL_FILE_CONFIG.outputUnMappedDataFileName,
+      EXCEL_FILE_CONFIG.excelDir,
+      EXCEL_FILE_CONFIG.inputDataFileExtension
+    );
+  }
+
+  async generateMappingReport(
+    outputUnMappedData: any[],
+    outputMappedData: any[]
+  ) {
+    try {
+      if (outputUnMappedData.length > 0) {
+        await this.outputUnMappedDataFileExcelUtil.writeToSingleSheetExcelFile(
+          outputUnMappedData
+        );
+      }
+      if (outputMappedData.length > 0) {
+        await this.outputMappedDataFileExcelUtil.writeToSingleSheetExcelFile(
+          outputMappedData
+        );
+      }
+    } catch (error: any) {
+      await this.logsUtil.addLogs(
+        'error',
+        error.message || error,
+        'getOutputMappedData'
+      );
+    }
   }
 
   async getOutputMappedData(

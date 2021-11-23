@@ -10,9 +10,17 @@ async function starApp() {
     await logsUtil.clearLogs();
     await logsUtil.addLogs('info', 'start an app', 'app');
     const appProcess = new AppProcess();
-    // const inputMapping = await appProcess.getInputMappingFile();
-    const inputDataMapping = await appProcess.getInputDataMappingFile();
-    console.log(inputDataMapping[0]);
+    const inputMappingConfigs = await appProcess.getInputMappingFile();
+    const inputDataMappings = await appProcess.getInputDataMappingFile();
+    const { outputMappedData, outputUnMappedData } =
+      await appProcess.getOutputMappedData(
+        inputMappingConfigs,
+        inputDataMappings
+      );
+    await appProcess.generateMappingReport(
+      outputUnMappedData,
+      outputMappedData
+    );
     await logsUtil.addLogs('info', 'End of script', 'app');
   } catch (error: any) {
     error = error.message || error;

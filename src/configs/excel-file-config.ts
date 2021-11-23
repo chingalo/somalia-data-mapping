@@ -11,5 +11,6 @@ export const EXCEL_FILE_CONFIG: ExcelFileConfigModel = {
   inputDataFileExtension: 'csv',
   inputDataDataElementReferenceColumnName: 'dataelement',
   inputDataCategoryOptionComboReferenceColumnName: 'categoryoptioncombouid',
-  outputDataFileName: '[Mapped] MF-04_data'
+  outputMappedDataFileName: '[Mapped] MF-04_data',
+  outputUnMappedDataFileName: '[Un Mapped] MF-04_data'
 };

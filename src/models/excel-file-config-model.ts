@@ -9,5 +9,6 @@ export interface ExcelFileConfigModel {
   inputDataFileExtension: string;
   inputDataDataElementReferenceColumnName: string;
   inputDataCategoryOptionComboReferenceColumnName: string;
-  outputDataFileName: string;
+  outputMappedDataFileName: string;
+  outputUnMappedDataFileName: string;
 }

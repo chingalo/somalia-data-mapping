@@ -1,4 +1,5 @@
 export interface ExcelFileConfigModel {
+  excelDir: string;
   inputMappingFileName: string;
   inputMappingFileExtension: string;
   inputMappingFileSheetName: string;

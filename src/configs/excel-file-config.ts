@@ -1,6 +1,7 @@
 import { ExcelFileConfigModel } from '../models/excel-file-config-model';
 
 export const EXCEL_FILE_CONFIG: ExcelFileConfigModel = {
+  excelDir: 'excel-file',
   inputMappingFileName: 'Somalia_Tools_Metadata_Mapping',
   inputMappingFileExtension: 'xlsx',
   inputMappingFileSheetName: 'sql MF-04',

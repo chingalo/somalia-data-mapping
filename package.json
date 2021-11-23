@@ -1,10 +1,10 @@
 {
-  "name": "somalia-data-mapping",
+  "name": "hmis-somalia-data-mapping",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-app": "tsc",
+    "build-app": "tsc && cd dist && rm -r resources && mkdir resources && zip -r -D hmis-somalia-data-mapping.zip .",
     "format": "prettier --config .prettierrc --write   \"*/*.ts\" \"*/*/*.ts\"  \"*.json\"",
     "start": "ts-node ./src/index.ts",
     "dev": "ts-node-dev --respawn ./src/index.ts",
